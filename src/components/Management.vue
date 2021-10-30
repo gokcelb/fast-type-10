@@ -2,7 +2,7 @@
   <div>
       <Explanation/>
       <Word v-bind:letterCombinations='letterCombinations'/>
-      <Type v-bind:letterCombinations='letterCombinations' v-on:renew='createLetterCombinations()'/>
+      <Type v-bind:letterCombinations='letterCombinations' v-on:generate='combine()'/>
   </div>
 </template>
 
@@ -23,6 +23,7 @@ export default {
         }
     },
     methods: {
+        // create one letter combination consisting of 4 random letters
         generateLetterCombination: function () {
             let letterCombination = "";
             const letters = "asdf";
@@ -31,16 +32,14 @@ export default {
             }
             return letterCombination;
         },
-        createLetterCombinations: function () {
-            const combinationsList = [];
+        // combine letter combinations and add spaces between them
+        combine: function () {
+            const combinations = [];
             for (let i=0; i<4; i++) {
-                combinationsList.push(this.generateLetterCombination());
+                combinations.push(this.generateLetterCombination());
             }
-            this.letterCombinations = combinationsList.join(" ");
+            this.letterCombinations = combinations.join(" ");
         }
-    },
-    mounted () {
-        this.createLetterCombinations();
     }
 }
 </script>
