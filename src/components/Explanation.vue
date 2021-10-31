@@ -1,22 +1,26 @@
 <template>
     <div>
-        <img src="../assets/colored-keyboard.png" alt="">
-         <p>{{ explanation }}</p>
+        <img class = "keyboard-img" src="../assets/colored-keyboard.png" alt="Colored Keyboard">
+         <p class="explanation">{{ explanation }}</p>
     </div>
 </template>
 
 <script>
 export default {
-    data: function () {
-        return {
-            explanation: `Your left fingers should continuously be placed on the ASDF row.
-            Your index finger should be on F, middle finger on D, ring finger on S, and
-            pinky finger on A.`
+    props: {
+        explanation: {
+            type: String
         }
     }
 }
 </script>
 
 <style>
+    .keyboard-img {
+        display: flex;
+    }
+    .explanation {
+        display: float;
+    }
 
 </style>

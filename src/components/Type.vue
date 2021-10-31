@@ -3,8 +3,8 @@
     <textarea :class="{'text-red': isWrong}" :disabled="disabled" @click="isOn ? null : calculateDuration()" @keyup="checkLettersAndReset(); handleBackspace($event)" v-model="textareaValue" cols="30" rows="10"></textarea>
     <div v-show="resetCount > 3 ? true : false">
         <p>Duration: {{ analysis.duration }} seconds</p>
-        <p>Mistake Count: {{ analysis.mistakenLetters.length }}</p>
-        <p v-for="(value, name) in rates" v-bind:key="name">Mistaken Letters: {{ name }} -> {{ value }}%</p>
+        <p>Mistake Count: {{ analysis.mistakeCount }}</p>
+        <p v-for="(value, name) in analysis.mistakenLetters" v-bind:key="name">Mistaken Letters: {{ name }} -> {{ value }}%</p>
     </div>
     <div>
         <button v-show="resetCount > 3 ? true : false" @click="reset">Reset</button>
@@ -30,7 +30,8 @@ export default {
             disabled: false,
             analysis: {
                 duration: 0,
-                mistakenLetters: []
+                mistakeCount: 0,
+                mistakenLetters: {},
             },
             rates: {}
         }
@@ -38,11 +39,21 @@ export default {
     methods: {
         // check if letters match with every keyup, process if letter wrong, start reset process
         checkLettersAndReset: function () {
-            let currLetter = this.letterCombinations[this.pointer]
+            let currLetter = this.letterCombinations[this.pointer];
             if (this.textareaValue[this.pointer] !== currLetter) {
                 this.isWrong = true;
+                this.analysis.mistakeCount += 1;
                 this.textareaValue = this.textareaValue.substring(0, this.pointer);
-                this.analysis.mistakenLetters.push(currLetter);
+                if (currLetter === " ") {
+                    currLetter = "space";
+                }
+                if (currLetter in this.analysis.mistakenLetters) {
+                    this.analysis.mistakenLetters[currLetter]++;
+                } else {
+                    this.analysis.mistakenLetters[currLetter] = 1;
+                }
+                console.log(this.analysis.mistakenLetters);
+                
             } else {
                 this.pointer += 1;
                 this.isWrong = false;
@@ -66,6 +77,12 @@ export default {
                 this.analysis.duration += 1;
             }, 1000);
         },
+        // calculate mistaken letter percentages
+        calculateMistakenLetterPercentages: function (mistakeCount) {
+            for (let key in this.analysis.mistakenLetters) {
+                this.analysis.mistakenLetters[key] = Math.round((this.analysis.mistakenLetters[key] / mistakeCount) * 100);
+            }
+        },
         // decrease pointer by one with backspace keyup
         handleBackspace: function (e) {
             if (e.key === 'Backspace') {
@@ -77,40 +94,20 @@ export default {
             this.resetCount += 1;
             if (this.resetCount > 3) {
                 this.disabled = true; // disabling text are to prevent user input
-                this.calculatedRates;
+                this.calculateMistakenLetterPercentages(this.analysis.mistakeCount);
                 return
             }
             this.$emit('generate');
         },
         // reset values and call generate
         reset: function () {
-            this.analysis.mistakenLetters = [];
-            this.rates = {}
+            this.analysis.mistakenLetters = {};
+            // this.rates = {}
             this.analysis.duration = 0;
+            this.analysis.mistakeCount = 0;
             this.resetCount = 0;
             this.disabled = false;
             this.generate();
-        },
-        // turn mistakenLetters array to dictionary, calculate mistaken letter percentages
-        calculateMistakenLetterRates: function (a) {
-            for (let i = 0; i < a.length; i++) {
-                if (a[i] === " ") {
-                    a[i] = "space";
-                }
-                if (this.rates[a[i]]) {
-                    this.rates[a[i]] += 1;
-                } else {
-                    this.rates[a[i]] = 1;
-                }
-            }
-            for (let key in this.rates) {
-                this.rates[key] = Math.round((this.rates[key] / a.length) * 100);
-            }
-        }
-    },
-    computed: {
-        calculatedRates () {
-            return this.calculateMistakenLetterRates(this.analysis.mistakenLetters);
         }
     },
     mounted () {

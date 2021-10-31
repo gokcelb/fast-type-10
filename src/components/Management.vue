@@ -1,8 +1,8 @@
 <template>
-  <div>
-      <Explanation/>
-      <Word v-bind:letterCombinations='letterCombinations'/>
-      <Type v-bind:letterCombinations='letterCombinations' v-on:generate='combine()'/>
+  <div class="main">
+      <Explanation :explanation='explanation'/>
+      <Word :letterCombinations='letterCombinations'/>
+      <Type :letterCombinations='letterCombinations' v-on:generate='combine()'/>
   </div>
 </template>
 
@@ -19,7 +19,10 @@ export default {
     },
     data: function () {
         return {
-            letterCombinations: ""
+            letterCombinations: "",
+            explanation: `Your left fingers should continuously be placed on the ASDF row.
+            Your index finger should be on F, middle finger on D, ring finger on S, and
+            pinky finger on A.`
         }
     },
     methods: {
@@ -45,5 +48,10 @@ export default {
 </script>
 
 <style>
-
+    .main {
+        height: 75%;
+        margin-top: 2%;
+        margin-bottom: 2%;
+        padding: 1%;
+    }
 </style>
