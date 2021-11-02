@@ -1,25 +1,23 @@
 <template>
   <div class="main">
       <Explanation :explanation='explanation'/>
-      <Word :letterCombinations='letterCombinations'/>
-      <Type :letterCombinations='letterCombinations' v-on:generate='combine()'/>
+      <WordContainer :letterCombinations='letterCombinations'/>
   </div>
 </template>
 
 <script>
 import Explanation from './Explanation.vue'
-import Word from './Word.vue'
-import Type from './Type.vue'
+import WordContainer from './WordContainer.vue'
 
 export default {
     components: {
         Explanation,
-        Word,
-        Type
+        WordContainer,
     },
     data: function () {
         return {
-            letterCombinations: "",
+            letterCombinations: '',
+            combinations: [],
             explanation: `Your left fingers should continuously be placed on the ASDF row.
             Your index finger should be on F, middle finger on D, ring finger on S, and
             pinky finger on A.`
@@ -37,12 +35,14 @@ export default {
         },
         // combine letter combinations and add spaces between them
         combine: function () {
-            const combinations = [];
             for (let i=0; i<4; i++) {
-                combinations.push(this.generateLetterCombination());
+                this.combinations.push(this.generateLetterCombination());
             }
-            this.letterCombinations = combinations.join(" ");
+            this.letterCombinations = this.combinations.join(" ");
         }
+    },
+    created () {
+        this.combine();
     }
 }
 </script>
