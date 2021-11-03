@@ -13,28 +13,22 @@
 <script>
 export default {
   props: {
-    // letterCombinations: {
-    //   type: String
-    // },
-    // remaining: {
-    //   type: String
-    // },
     preventTyping: {
       type: Boolean
-    }
+    },
   },
   data() {
     return {
       typedLetters: "",
       index: 0,
       disabled: false,
+      analysisOn: false
     };
   },
   methods: {
     onType: function (event) {
-      // if backspace is clicked call onBackspace function,
-      // else check if preventTyping should be activated,
-      // if not, proceed with standard typing procedures
+      this.analysisOn = true;
+      this.$emit('initAnalysis');
       if (event.key === "Backspace") {
         this.onBackspace();
       } else {
@@ -46,22 +40,18 @@ export default {
       }
     },
     onBackspace: function () {
-      // if index is equal to 0, meaning no letter has been
-      // typed on the textarea, end the function, otherwise,
-      // emit onBackspace function to be called in the WordContainer
       console.log("backspaaaaaaaaaace");
       if (this.index === 0) return;
       this.$emit("onBackspace", this.index);
       this.index--;
     },
     clearTypedLetters: function () {
-      // everytime user types one combination correctly,
-      // clear textarea and reset index
       this.typedLetters = "";
       this.index = -1;
     },
     disableTextarea: function () {
-      // when round is over, disable the textarea
+      this.analysisOn = false;
+      this.$emit('endAnalysis');
       this.typedLetters = "";
       this.disabled = true;
     },
