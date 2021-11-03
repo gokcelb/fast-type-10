@@ -1,7 +1,7 @@
 <template>
   <div class="main">
       <Explanation :explanation='explanation'/>
-      <WordContainer :letterCombinations='letterCombinations'/>
+      <WordContainer @reset="combine" :letterCombinations='letterCombinations'/>
   </div>
 </template>
 
