@@ -1,5 +1,5 @@
 <template>
-  <div v-if="roundOver">
+  <div>
     <p>Duration: {{ elapsedTime }}</p>
     <p>Total mistake count: {{ mistakes.length }}</p>
     <p>Accuracy: {{ accuracy }}%</p>
@@ -27,7 +27,7 @@
       >, you made a mistake
     </p>
     <p v-for="(values, index) in wordTimer" :key="'wt-' + index">
-      {{ values["word"] }}: {{ values["wordTypingSpeed"] }} => {{ index }}
+      <span><strong>{{ values["word"] }}</strong></span>: {{ values["wordTypingSpeed"] }}
     </p>
   </div>
 </template>

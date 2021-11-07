@@ -62,8 +62,6 @@ export default {
   methods: {
     onType: function (event, typedLetter) {
       this.typingStarting();
-      // end function when remaining has undefined element to prevent it from appearing on the screen
-      if (this.remaining[0] === undefined) return;
       this.typingContinuing(typedLetter);
       this.typingEnding(event);
       console.log({
@@ -84,6 +82,8 @@ export default {
       }
     },
     typingContinuing: function (typedLetter) {
+      // end function when remaining has undefined element
+      if (this.remaining[0] === undefined) return;
       let expectedLetter = this.remaining[0];
       if (this.mistakes.length > 0 || expectedLetter !== typedLetter) {
         this.mistakes.push({
@@ -162,12 +162,15 @@ export default {
 
 <style>
 .text-green {
-  color: green;
+  color: rgb(58, 206, 58);
 }
 .text-bg-red {
   background-color: red;
 }
 .text-24 {
   font-size: 24px;
+}
+.bg-grey {
+  background-color: gainsboro;
 }
 </style>

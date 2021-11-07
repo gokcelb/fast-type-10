@@ -35,7 +35,7 @@ export default {
         },
         // combine letter combinations and add spaces between them
         combine: function () {
-            for (let i=0; i<4; i++) {
+            for (let i=0; i<12; i++) {
                 this.combinations.push(this.generateLetterCombination());
             }
             this.letterCombinations = this.combinations.join(" ");
